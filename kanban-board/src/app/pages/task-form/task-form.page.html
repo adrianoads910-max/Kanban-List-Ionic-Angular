@@ -1,0 +1,52 @@
+<ion-header class="bg-white shadow">
+  <ion-toolbar>
+    <ion-title class="text-lg font-bold">Nova Tarefa</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="p-4 bg-gray-100">
+
+  <div class="bg-white p-4 rounded-lg shadow flex flex-col gap-4">
+
+    <ion-item class="rounded border border-gray-300">
+      <ion-input
+        label="Título"
+        class="p-2"
+        [(ngModel)]="task.title">
+      </ion-input>
+    </ion-item>
+
+    <ion-item class="rounded border border-gray-300">
+      <ion-textarea
+        label="Descrição"
+        class="p-2"
+        [(ngModel)]="task.description">
+      </ion-textarea>
+    </ion-item>
+
+    <ion-item class="rounded border border-gray-300">
+      <ion-datetime
+        presentation="date"
+        label="Prazo"
+        [(ngModel)]="task.dueDate">
+      </ion-datetime>
+    </ion-item>
+
+    <ion-item class="rounded border border-gray-300">
+      <ion-select [(ngModel)]="task.priority">
+        <ion-select-option value="baixa">Baixa</ion-select-option>
+        <ion-select-option value="media">Média</ion-select-option>
+        <ion-select-option value="alta">Alta</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button 
+      expand="block" 
+      class="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg"
+      (click)="save()">
+      Salvar
+    </ion-button>
+
+  </div>
+
+</ion-content>

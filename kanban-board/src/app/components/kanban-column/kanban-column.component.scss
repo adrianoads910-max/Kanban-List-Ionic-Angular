@@ -1,0 +1,11 @@
+.column {
+  background: #f1f1f1;
+  padding: 16px;
+  border-radius: 8px;
+  min-height: 70vh;
+}
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

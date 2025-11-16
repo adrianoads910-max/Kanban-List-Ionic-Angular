@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar class="bg-white shadow">
+    <ion-title class="text-xl font-bold">Kanban Board</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="bg-gray-100">
+
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 p-4">
+
+    @for (col of columns; track col.status) {
+      <app-kanban-column
+        [title]="col.title"
+        [status]="col.status"
+        [tasks]="getTasksByStatus(col.status)">
+      </app-kanban-column>
+    }
+
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button class="bg-blue-600 hover:bg-blue-700 transition">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
