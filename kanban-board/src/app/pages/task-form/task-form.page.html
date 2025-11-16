@@ -1,51 +1,69 @@
-<ion-header class="bg-white shadow">
+<ion-header class="shadow-md">
   <ion-toolbar>
-    <ion-title class="text-lg font-bold">Nova Tarefa</ion-title>
+    <ion-title class="text-lg font-semibold">
+      {{ task ? 'Editar Tarefa' : 'Nova Tarefa' }}
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="p-4 bg-gray-100">
+<ion-content class="p-5 bg-gray-100">
 
-  <div class="bg-white p-4 rounded-lg shadow flex flex-col gap-4">
+  <div class="space-y-5">
 
-    <ion-item class="rounded border border-gray-300">
+    <!-- TÍTULO -->
+    <div class="space-y-1">
+      <label class="text-sm font-medium text-gray-700">Título</label>
       <ion-input
-        label="Título"
-        class="p-2"
-        [(ngModel)]="task.title">
+        [(ngModel)]="form.title"
+        placeholder="Digite o título"
+        type="text">
       </ion-input>
-    </ion-item>
+    </div>
 
-    <ion-item class="rounded border border-gray-300">
+    <!-- DESCRIÇÃO -->
+    <div class="space-y-1">
+      <label class="text-sm font-medium text-gray-700">Descrição</label>
       <ion-textarea
-        label="Descrição"
-        class="p-2"
-        [(ngModel)]="task.description">
+        [(ngModel)]="form.description"
+        placeholder="Detalhes da tarefa"
+        auto-grow="true">
       </ion-textarea>
-    </ion-item>
+    </div>
 
-    <ion-item class="rounded border border-gray-300">
-      <ion-datetime
-        presentation="date"
-        label="Prazo"
-        [(ngModel)]="task.dueDate">
-      </ion-datetime>
-    </ion-item>
+    <!-- STATUS -->
+    <div class="space-y-1">
+      <label class="text-sm font-medium text-gray-700">Status</label>
+      <select
+        [(ngModel)]="form.status"
+        class="w-full p-3 bg-white border border-gray-300 rounded-lg">
+        <option value="aberto">Aberto</option>
+        <option value="em-andamento">Em andamento</option>
+        <option value="concluido">Concluído</option>
+        <option value="done-done">Done Done</option>
+      </select>
+    </div>
 
-    <ion-item class="rounded border border-gray-300">
-      <ion-select [(ngModel)]="task.priority">
-        <ion-select-option value="baixa">Baixa</ion-select-option>
-        <ion-select-option value="media">Média</ion-select-option>
-        <ion-select-option value="alta">Alta</ion-select-option>
-      </ion-select>
-    </ion-item>
+    <!-- PRIORIDADE -->
+    <div class="space-y-1">
+      <label class="text-sm font-medium text-gray-700">Prioridade</label>
+      <select
+        [(ngModel)]="form.priority"
+        class="w-full p-3 bg-white border border-gray-300 rounded-lg">
+        <option value="baixa">Baixa</option>
+        <option value="media">Média</option>
+        <option value="alta">Alta</option>
+      </select>
+    </div>
 
-    <ion-button 
-      expand="block" 
-      class="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg"
-      (click)="save()">
-      Salvar
-    </ion-button>
+    <!-- BOTÕES -->
+    <div class="flex justify-end gap-3 pt-3">
+      <ion-button fill="outline" color="medium" (click)="dismiss()">
+        Cancelar
+      </ion-button>
+      <ion-button color="primary" (click)="saveTask()">
+        Salvar
+      </ion-button>
+    </div>
 
   </div>
 

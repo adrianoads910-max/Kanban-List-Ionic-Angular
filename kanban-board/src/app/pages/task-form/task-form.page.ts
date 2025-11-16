@@ -1,61 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-// Ionic Components
 import {
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-  IonItem,
-  IonInput,
-  IonTextarea,
-  IonDatetime,
-  IonSelect,
-  IonSelectOption,
-  IonButton,
+  IonContent, IonHeader, IonTitle, IonToolbar,
+  IonButton, IonInput, IonTextarea, ModalController
 } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-task-form',
+  standalone: true,
   templateUrl: './task-form.page.html',
   styleUrls: ['./task-form.page.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
-
     IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonItem,
+    IonButton,
     IonInput,
-    IonTextarea,
-    IonDatetime,
-    IonSelect,
-    IonSelectOption,
-    IonButton
-  ]
+    IonTextarea
+  ],
 })
-export class TaskFormPage implements OnInit {
+export class TaskFormPage {
 
-  // campos da tarefa
-  task = {
+  @Input() task?: any;
+
+  form = {
     title: '',
     description: '',
+    status: 'aberto',
+    priority: 'baixa',
     dueDate: '',
-    priority: 'media'
+    subtasks: []
   };
 
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.task) {
+      this.form = { ...this.task };  // preenche o form para edição
+    }
+  }
 
-  save() {
-    console.log('Tarefa salva:', this.task);
+  dismiss() {
+    this.modalCtrl.dismiss(null, 'cancel');
+  }
 
-    // Aqui você pode enviar a tarefa para um service, modal, rota etc.
+  saveTask() {
+    this.modalCtrl.dismiss(this.form, 'confirm');
   }
 }

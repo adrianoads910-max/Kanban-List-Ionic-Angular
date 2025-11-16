@@ -1,31 +1,51 @@
-<ion-card class="shadow-md rounded-xl border border-gray-200">
-  <ion-card-header class="p-4">
-    <ion-card-title class="text-lg font-semibold text-gray-800">
-      {{ task.title }}
-    </ion-card-title>
+<div 
+  class="cursor-grab active:cursor-grabbing"
+  draggable="true"
+  (dragstart)="dragStart(task, $event)"
+  (dragend)="dragEnd($event)"
+>
 
-    <ion-card-subtitle class="text-sm text-gray-500">
-      Prioridade: 
-      <span 
-        class="font-bold"
-        [ngClass]="{
-          'text-green-600': task.priority === 'baixa',
-          'text-yellow-600': task.priority === 'media',
-          'text-red-600': task.priority === 'alta'
-        }">
-        {{ task.priority }}
-      </span>
-    </ion-card-subtitle>
-  </ion-card-header>
+  <ion-card class="shadow-md rounded-xl border border-gray-200">
 
-  <ion-card-content class="px-4 pb-4 text-gray-700">
+    <ion-card-header class="p-4 flex justify-between items-start">
 
-    <p>{{ task.description }}</p>
+      <div>
+        <ion-card-title class="text-lg font-semibold text-gray-800">
+          {{ task.title }}
+        </ion-card-title>
 
-    @if (task.dueDate) {
-      <p class="mt-2 text-sm text-gray-500">
-        📅 {{ task.dueDate | date:'shortDate' }}
-      </p>
-    }
-  </ion-card-content>
-</ion-card>
+        <ion-card-subtitle class="text-sm text-gray-500">
+          Prioridade:
+          <span 
+            class="font-bold"
+            [ngClass]="{
+              'text-green-600': task.priority === 'baixa',
+              'text-yellow-600': task.priority === 'media',
+              'text-red-600': task.priority === 'alta'
+            }">
+            {{ task.priority }}
+          </span>
+        </ion-card-subtitle>
+      </div>
+
+      <!-- Botão editar -->
+      <button 
+        class="text-blue-600 hover:text-blue-800 transition"
+        (click)="edit.emit(task)">
+        <ion-icon name="create-outline"></ion-icon>
+      </button>
+
+    </ion-card-header>
+
+    <ion-card-content class="px-4 pb-4 text-gray-700">
+      <p>{{ task.description }}</p>
+
+      @if (task.dueDate) {
+        <p class="mt-2 text-sm text-gray-500">
+          📅 {{ task.dueDate | date:'shortDate' }}
+        </p>
+      }
+    </ion-card-content>
+
+  </ion-card>
+</div>
