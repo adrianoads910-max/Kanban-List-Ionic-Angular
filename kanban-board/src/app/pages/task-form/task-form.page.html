@@ -33,6 +33,16 @@
         </ion-textarea>
       </div>
 
+      <!-- DATA -->
+      <div class="space-y-1">
+        <label class="text-sm font-medium text-gray-700">Data de Entrega</label>
+        <input
+          type="date"
+          [(ngModel)]="form.dueDate"
+          class="w-full p-3 bg-white border rounded-lg"
+        />
+      </div>
+
       <!-- STATUS -->
       <div class="space-y-1">
         <label class="text-sm font-medium text-gray-700">Status</label>
@@ -72,15 +82,9 @@
           placeholder="Nova subtarefa">
         </ion-input>
 
-        <ion-button 
-          fill="outline" 
-          color="medium"
-          (click)="addSubtask()"
-        >
+        <ion-button fill="outline" color="medium" (click)="addSubtask()">
           Adicionar
         </ion-button>
-
-
       </div>
 
       <!-- LISTA -->
@@ -115,15 +119,9 @@
         Cancelar
       </ion-button>
 
-      <ion-button 
-      fill="outline" 
-      color="success"
-      (click)="saveTask()"
-    >
-      Salvar
-    </ion-button>
-
-
+      <ion-button fill="outline" color="success" (click)="saveTask()">
+        Salvar
+      </ion-button>
     </div>
 
   </div>

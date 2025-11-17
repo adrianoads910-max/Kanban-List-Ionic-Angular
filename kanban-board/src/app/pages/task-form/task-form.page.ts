@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import {
   IonContent, IonHeader, IonTitle, IonToolbar,
   IonButton, IonInput, IonTextarea, ModalController
@@ -14,7 +15,8 @@ import { Task, Subtask } from 'src/app/models/task';
   templateUrl: './task-form.page.html',
   styleUrls: ['./task-form.page.scss'],
   imports: [
-    CommonModule, FormsModule,
+    CommonModule,
+    FormsModule,
     IonContent, IonHeader, IonTitle, IonToolbar,
     IonButton, IonInput, IonTextarea
   ],
@@ -23,6 +25,7 @@ export class TaskFormPage {
 
   @Input() task?: Task;
 
+  // Estado inicial da tarefa
   form: Task = {
     id: '',
     title: '',
@@ -30,7 +33,9 @@ export class TaskFormPage {
     status: 'aberto',
     priority: 'baixa',
     dueDate: '',
-    subtasks: []
+    subtasks: [],
+    createdAt: undefined,
+    updatedAt: undefined
   };
 
   newSubtaskLabel = '';
@@ -39,7 +44,14 @@ export class TaskFormPage {
 
   ngOnInit() {
     if (this.task) {
-      this.form = structuredClone(this.task); // clone seguro
+      this.form = structuredClone(this.task);
+
+      // Evitar problemas com undefined no input date
+      this.form.dueDate = this.task.dueDate ?? '';
+    } else {
+      // Criação nova — gerar id
+      this.form.id = crypto.randomUUID();
+      this.form.createdAt = new Date();
     }
   }
 
@@ -47,7 +59,11 @@ export class TaskFormPage {
     const label = this.newSubtaskLabel.trim();
     if (!label) return;
 
-    this.form.subtasks.push({ label, done: false });
+    this.form.subtasks.push({
+      label,
+      done: false
+    });
+
     this.newSubtaskLabel = '';
   }
 
@@ -60,6 +76,7 @@ export class TaskFormPage {
   }
 
   saveTask() {
+    this.form.updatedAt = new Date();
     this.modalCtrl.dismiss(this.form, 'confirm');
   }
 }
