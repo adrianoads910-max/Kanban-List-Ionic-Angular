@@ -6,28 +6,25 @@ import {
   IonButton, IonInput, IonTextarea, ModalController
 } from '@ionic/angular/standalone';
 
+import { Task, Subtask } from 'src/app/models/task';
+
 @Component({
   selector: 'app-task-form',
   standalone: true,
   templateUrl: './task-form.page.html',
   styleUrls: ['./task-form.page.scss'],
   imports: [
-    CommonModule,
-    FormsModule,
-    IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
-    IonButton,
-    IonInput,
-    IonTextarea
+    CommonModule, FormsModule,
+    IonContent, IonHeader, IonTitle, IonToolbar,
+    IonButton, IonInput, IonTextarea
   ],
 })
 export class TaskFormPage {
 
-  @Input() task?: any;
+  @Input() task?: Task;
 
-  form = {
+  form: Task = {
+    id: '',
     title: '',
     description: '',
     status: 'aberto',
@@ -36,12 +33,26 @@ export class TaskFormPage {
     subtasks: []
   };
 
+  newSubtaskLabel = '';
+
   constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {
     if (this.task) {
-      this.form = { ...this.task };  // preenche o form para edição
+      this.form = structuredClone(this.task); // clone seguro
     }
+  }
+
+  addSubtask() {
+    const label = this.newSubtaskLabel.trim();
+    if (!label) return;
+
+    this.form.subtasks.push({ label, done: false });
+    this.newSubtaskLabel = '';
+  }
+
+  removeSubtask(sub: Subtask) {
+    this.form.subtasks = this.form.subtasks.filter(s => s !== sub);
   }
 
   dismiss() {

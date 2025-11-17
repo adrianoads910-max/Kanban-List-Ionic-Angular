@@ -6,63 +6,124 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="p-5 bg-gray-100">
+<ion-content class="bg-gray-100">
 
-  <div class="space-y-5">
+  <div class="max-w-xl mx-auto p-5 space-y-6">
 
-    <!-- TÍTULO -->
-    <div class="space-y-1">
-      <label class="text-sm font-medium text-gray-700">Título</label>
-      <ion-input
-        [(ngModel)]="form.title"
-        placeholder="Digite o título"
-        type="text">
-      </ion-input>
+    <!-- CARD PRINCIPAL -->
+    <div class="bg-white shadow-md rounded-xl p-5 space-y-5">
+
+      <!-- TÍTULO -->
+      <div class="space-y-1">
+        <label class="text-sm font-medium text-gray-700">Título</label>
+        <ion-input 
+          [(ngModel)]="form.title" 
+          type="text"
+          placeholder="Digite o título da tarefa">
+        </ion-input>
+      </div>
+
+      <!-- DESCRIÇÃO -->
+      <div class="space-y-1">
+        <label class="text-sm font-medium text-gray-700">Descrição</label>
+        <ion-textarea 
+          [(ngModel)]="form.description"
+          autoGrow="true"
+          placeholder="Digite os detalhes da tarefa">
+        </ion-textarea>
+      </div>
+
+      <!-- STATUS -->
+      <div class="space-y-1">
+        <label class="text-sm font-medium text-gray-700">Status</label>
+        <select 
+          [(ngModel)]="form.status"
+          class="w-full p-3 bg-white border rounded-lg">
+          <option value="aberto">Aberto</option>
+          <option value="em-andamento">Em andamento</option>
+          <option value="concluido">Concluído</option>
+          <option value="done-done">Done Done</option>
+        </select>
+      </div>
+
+      <!-- PRIORIDADE -->
+      <div class="space-y-1">
+        <label class="text-sm font-medium text-gray-700">Prioridade</label>
+        <select 
+          [(ngModel)]="form.priority"
+          class="w-full p-3 bg-white border rounded-lg">
+          <option value="baixa">Baixa</option>
+          <option value="media">Média</option>
+          <option value="alta">Alta</option>
+        </select>
+      </div>
+
     </div>
 
-    <!-- DESCRIÇÃO -->
-    <div class="space-y-1">
-      <label class="text-sm font-medium text-gray-700">Descrição</label>
-      <ion-textarea
-        [(ngModel)]="form.description"
-        placeholder="Detalhes da tarefa"
-        auto-grow="true">
-      </ion-textarea>
-    </div>
+    <!-- SUBTAREFAS CARD -->
+    <div class="bg-white shadow-md rounded-xl p-5 space-y-5">
 
-    <!-- STATUS -->
-    <div class="space-y-1">
-      <label class="text-sm font-medium text-gray-700">Status</label>
-      <select
-        [(ngModel)]="form.status"
-        class="w-full p-3 bg-white border border-gray-300 rounded-lg">
-        <option value="aberto">Aberto</option>
-        <option value="em-andamento">Em andamento</option>
-        <option value="concluido">Concluído</option>
-        <option value="done-done">Done Done</option>
-      </select>
-    </div>
+      <h2 class="text-base font-semibold text-gray-700">Subtarefas</h2>
 
-    <!-- PRIORIDADE -->
-    <div class="space-y-1">
-      <label class="text-sm font-medium text-gray-700">Prioridade</label>
-      <select
-        [(ngModel)]="form.priority"
-        class="w-full p-3 bg-white border border-gray-300 rounded-lg">
-        <option value="baixa">Baixa</option>
-        <option value="media">Média</option>
-        <option value="alta">Alta</option>
-      </select>
+      <!-- INPUT PARA ADICIONAR -->
+      <div class="flex gap-3">
+        <ion-input
+          [(ngModel)]="newSubtaskLabel"
+          placeholder="Nova subtarefa">
+        </ion-input>
+
+        <ion-button 
+          fill="outline" 
+          color="medium"
+          (click)="addSubtask()"
+        >
+          Adicionar
+        </ion-button>
+
+
+      </div>
+
+      <!-- LISTA -->
+      <div class="space-y-3">
+        @for (sub of form.subtasks; track sub.label) {
+          <div class="flex items-center gap-3 border rounded-md p-3 bg-gray-50">
+
+            <input type="checkbox" [(ngModel)]="sub.done" />
+
+            <span 
+              class="flex-1"
+              [class.line-through]="sub.done"
+              [class.text-gray-400]="sub.done">
+              {{ sub.label }}
+            </span>
+
+            <button
+              class="text-red-600 hover:text-red-800"
+              (click)="removeSubtask(sub)">
+              Remover
+            </button>
+
+          </div>
+        }
+      </div>
+
     </div>
 
     <!-- BOTÕES -->
-    <div class="flex justify-end gap-3 pt-3">
+    <div class="flex justify-end gap-3 pb-10">
       <ion-button fill="outline" color="medium" (click)="dismiss()">
         Cancelar
       </ion-button>
-      <ion-button color="primary" (click)="saveTask()">
-        Salvar
-      </ion-button>
+
+      <ion-button 
+      fill="outline" 
+      color="success"
+      (click)="saveTask()"
+    >
+      Salvar
+    </ion-button>
+
+
     </div>
 
   </div>
