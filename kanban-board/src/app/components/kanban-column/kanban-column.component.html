@@ -10,21 +10,48 @@
   }"
 >
 
-  <h2 class="text-lg font-bold mb-4 text-gray-700">
+  <!-- TÍTULO -->
+  <h2 class="text-lg font-bold mb-4 text-gray-800 flex justify-between items-center">
     {{ title }}
-    <span class="text-sm text-gray-500">({{ tasks.length }})</span>
+    <span class="text-sm text-gray-700 font-medium">({{ filteredTasks.length }})</span>
   </h2>
 
+  <!-- FILTROS -->
+  <div class="mb-4 space-y-3">
+
+    <!-- Filtro por título -->
+    <input
+    type="text"
+    [(ngModel)]="filterTitle"
+    placeholder="Filtrar por título..."
+    class="w-full p-2 rounded-md border border-gray-300 bg-gray-600
+          text-white placeholder-gray-200"
+  />
+
+
+    <!-- Filtro por prioridade -->
+    <select
+    [(ngModel)]="filterPriority"
+      class="w-full p-2 rounded-md border border-gray-300 bg-gray-600 text-white"
+    >
+      <option value="todas">Todas as prioridades</option>
+      <option  value="baixa">Baixa</option>
+      <option  value="media">Média</option>
+      <option  value="alta">Alta</option>
+    </select>
+
+  </div>
+
+  <!-- LISTA DE CARDS -->
   <div class="flex flex-col gap-3">
 
-    @for (task of tasks; track task.id) {
+    @for (task of filteredTasks; track task.id) {
 
       <app-task-card
         [task]="task"
         (edit)="editTask.emit(task)"
         (dragStarted)="startDrag.emit(task)"
-      >
-      </app-task-card>
+      ></app-task-card>
 
     }
 
