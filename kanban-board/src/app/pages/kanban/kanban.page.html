@@ -1,10 +1,25 @@
 <ion-header>
-  <ion-toolbar class="bg-white shadow">
-    <ion-title class="text-xl font-bold">Kanban Board</ion-title>
+  <ion-toolbar class="navbar-custom shadow flex justify-between items-center">
+
+    <ion-title class="text-xl font-bold text-amber-50">
+      Kanban Board
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button
+        (click)="openTaskForm()"
+        class="bg-blue-500 hover:bg-blue-700 text-amber-50 rounded-lg px-2 py-1 flex items-center gap-2"
+      >
+        <ion-icon name="add" class="text-white"></ion-icon>
+        Nova Tarefa
+      </ion-button>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="bg-gray-100">
+
+<ion-content class="body-custom bg-gray-200">
 
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 p-4">
 
@@ -23,13 +38,5 @@
     }
 
   </div>
-
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button 
-      (click)="openTaskForm()"
-      class="bg-blue-600 hover:bg-blue-700 transition">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 
 </ion-content>

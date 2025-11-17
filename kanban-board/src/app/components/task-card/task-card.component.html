@@ -4,39 +4,50 @@
   (dragstart)="dragStart(task, $event)"
   (dragend)="dragEnd($event)"
 >
-
   <ion-card class="shadow-md rounded-xl border border-gray-200">
 
-    <ion-card-header class="p-4 flex justify-between items-start">
+    <!-- HEADER -->
+    <ion-card-header class="p-4">
 
-      <div>
-        <ion-card-title class="text-lg font-semibold text-gray-800">
-          {{ task.title }}
-        </ion-card-title>
+      <div class="flex justify-between items-start">
 
-        <ion-card-subtitle class="text-sm text-gray-500">
-          Prioridade:
-          <span 
-            class="font-bold"
+        <!-- TÍTULO E PRIORIDADE -->
+        <div>
+          <ion-card-title class="text-lg font-semibold text-gray-800">
+            {{ task.title }}
+          </ion-card-title>
+
+          <!-- BADGE DE PRIORIDADE -->
+          <span
+            class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold"
             [ngClass]="{
-              'text-green-600': task.priority === 'baixa',
-              'text-yellow-600': task.priority === 'media',
-              'text-red-600': task.priority === 'alta'
-            }">
-            {{ task.priority }}
+              'bg-green-100 text-green-700': task.priority === 'baixa',
+              'bg-yellow-100 text-yellow-700': task.priority === 'media',
+              'bg-red-100 text-red-700': task.priority === 'alta'
+            }"
+          >
+            ● {{
+              task.priority === 'baixa'
+                ? 'Baixa'
+                : task.priority === 'media'
+                  ? 'Média'
+                  : 'Alta'
+            }}
           </span>
-        </ion-card-subtitle>
+        </div>
+
+        <!-- BOTÃO EDITAR NO TOPO DIREITO -->
+        <button 
+          class="text-blue-600 hover:text-blue-800 transition ml-2"
+          (click)="edit.emit(task)"
+        >
+          <ion-icon name="create-outline" class="text-xl"></ion-icon>
+        </button>
+
       </div>
-
-      <!-- Botão editar -->
-      <button 
-        class="text-blue-600 hover:text-blue-800 transition"
-        (click)="edit.emit(task)">
-        <ion-icon name="create-outline"></ion-icon>
-      </button>
-
     </ion-card-header>
 
+    <!-- CONTEÚDO -->
     <ion-card-content class="px-4 pb-4 text-gray-700">
       <p>{{ task.description }}</p>
 

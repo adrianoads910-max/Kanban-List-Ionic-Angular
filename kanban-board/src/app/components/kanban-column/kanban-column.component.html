@@ -1,21 +1,33 @@
-<div 
-  class="bg-white rounded-lg shadow p-4 flex flex-col min-h-[70vh]"
+<div
+  class="rounded-lg shadow p-4 flex flex-col min-h-[70vh]"
   (dragover)="onDragOver($event)"
   (drop)="onDrop($event)"
+  [ngClass]="{
+    'bg-blue-200 border border-blue-400': status === 'aberto',
+    'bg-yellow-100 border border-yellow-400': status === 'em-andamento',
+    'bg-green-100 border border-green-600': status === 'concluido',
+    'bg-purple-100 border border-purple-400': status === 'done-done'
+  }"
 >
 
   <h2 class="text-lg font-bold mb-4 text-gray-700">
-    {{ title }} 
+    {{ title }}
     <span class="text-sm text-gray-500">({{ tasks.length }})</span>
   </h2>
 
   <div class="flex flex-col gap-3">
+
     @for (task of tasks; track task.id) {
-      <app-task-card 
+
+      <app-task-card
         [task]="task"
         (edit)="editTask.emit(task)"
-      />
+        (dragStarted)="startDrag.emit(task)"
+      >
+      </app-task-card>
+
     }
+
   </div>
 
 </div>
