@@ -17,6 +17,9 @@ log.txt
 /.versions
 /coverage
 
+# Firebase & Environment config
+src/environments/environment.ts
+src/environments/environment.prod.ts
 # Ionic
 /.ionic
 /www

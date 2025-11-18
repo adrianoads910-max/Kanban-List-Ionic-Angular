@@ -1,72 +1,88 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Task } from '../models/task';
+
+// 🔥 1. Importações do ANGULAR FIRE (Apenas para injeção e Observable)
+import { 
+  Firestore, 
+  collectionData 
+} from '@angular/fire/firestore';
+
+// 🔥 2. Importações do SDK NATIVO DO FIREBASE (Para ações CRUD)
+// Isso resolve o erro de "Injection Context"
+import { 
+  collection, 
+  addDoc, 
+  doc, 
+  deleteDoc, 
+  updateDoc 
+} from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
 
-  private tasks: Task[] = [];
+  // Injeta a instância do Firestore
+  private firestore = inject(Firestore);
+  
+  // Cria a referência da coleção usando a função nativa
+  private tasksCollection = collection(this.firestore, 'tasks');
 
-  constructor() {
-    this.load();
+  // Inicializa o Observable no contexto de criação da classe (Obrigatório para collectionData)
+  private tasks$ = collectionData(this.tasksCollection, { idField: 'id' }) as Observable<Task[]>;
+
+  constructor() {}
+
+  /**
+   * Retorna o Observable já criado
+   */
+  getAll(): Observable<Task[]> {
+    return this.tasks$;
   }
 
-  /** Retorna todas as tarefas */
-  getAll() {
-    return this.tasks;
-  }
-
-  /** Edita campos de uma tarefa existente */
-  update(id: string, data: Partial<Task>) {
-    this.tasks = this.tasks.map(t => 
-      t.id === id 
-        ? { ...t, ...data, updatedAt: new Date() } 
-        : t
-    );
-    this.save();
-  }
-
-  /** Move uma tarefa entre colunas */
+  /**
+   * Adicionar (Usa função nativa do firebase/firestore)
+   */
   add(task: Task) {
-  const newTask: Task = {
-    ...task,
-    id: crypto.randomUUID(),
-    status: task.status as Task['status'],
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
-
-  this.tasks.push(newTask);
-  this.save();
-}
-
-move(id: string, newStatus: string) {
-  const task = this.tasks.find(t => t.id === id);
-
-  if (task) {
-    task.status = newStatus as Task['status'];
-    task.updatedAt = new Date();
-    this.save();
+    const { id, ...taskData } = task;
+    
+    // addDoc nativo não exige contexto de injeção
+    return addDoc(this.tasksCollection, {
+      ...taskData,
+      status: task.status || 'aberto',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
   }
-}
 
-  /** Deleta tarefa */
+  /**
+   * Atualizar
+   */
+  update(id: string, data: Partial<Task>) {
+    const docRef = doc(this.firestore, `tasks/${id}`);
+    return updateDoc(docRef, {
+      ...data,
+      updatedAt: new Date()
+    });
+  }
+
+  /**
+   * Mover
+   */
+  move(id: string, newStatus: string) {
+    const docRef = doc(this.firestore, `tasks/${id}`);
+    return updateDoc(docRef, {
+      status: newStatus as Task['status'],
+      updatedAt: new Date()
+    });
+  }
+
+  /**
+   * Deletar
+   */
   delete(id: string) {
-    this.tasks = this.tasks.filter(t => t.id !== id);
-    this.save();
-  }
-
-  /** Salva no localStorage */
-  private save() {
-    localStorage.setItem('tasks', JSON.stringify(this.tasks));
-  }
-
-  /** Carrega do localStorage */
-  private load() {
-    const saved = localStorage.getItem('tasks');
-    if (saved) {
-      this.tasks = JSON.parse(saved);
-    }
+    const docRef = doc(this.firestore, `tasks/${id}`);
+    return deleteDoc(docRef);
   }
 }

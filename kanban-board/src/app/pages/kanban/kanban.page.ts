@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 import { KanbanColumnComponent } from 'src/app/components/kanban-column/kanban-column.component';
 import { TaskService } from 'src/app/services/task.service';
@@ -18,9 +19,10 @@ import { Task } from 'src/app/models/task';
   templateUrl: './kanban.page.html',
   styleUrls: ['./kanban.page.scss']
 })
-export class KanbanPage {
-
+export class KanbanPage implements OnInit, OnDestroy {
+  
   tasks: Task[] = [];
+  tasksSubscription!: Subscription; // Para gerenciar a memória
 
   columns = [
     { title: 'Aberto',        status: 'aberto' },
@@ -31,17 +33,29 @@ export class KanbanPage {
 
   draggingTask: Task | null = null;
 
-  constructor(
-    private taskService: TaskService,
-    private modalCtrl: ModalController
-  ) {}
+  // Injeção moderna
+  private taskService = inject(TaskService);
+  private modalCtrl = inject(ModalController);
 
-  // CARREGA AO ENTRAR NA PÁGINA
-  ionViewWillEnter() {
-    this.tasks = this.taskService.getAll();
+  constructor() {}
+
+  // 🔥 INICIALIZAÇÃO: Conecta ao fluxo de dados do Firebase
+  ngOnInit() {
+    // Aqui nos inscrevemos. Sempre que o banco mudar (add, edit, move, delete),
+    // 'this.tasks' atualiza automaticamente e a tela redesenha.
+    this.tasksSubscription = this.taskService.getAll().subscribe((firestoreTasks) => {
+      this.tasks = firestoreTasks;
+    });
   }
 
-  // FILTRA AS TAREFAS POR COLUNA
+  // Boa prática: Se sair da página, para de ouvir o banco
+  ngOnDestroy() {
+    if (this.tasksSubscription) {
+      this.tasksSubscription.unsubscribe();
+    }
+  }
+
+  // FILTRA AS TAREFAS POR COLUNA (Igual ao seu anterior)
   getTasksByStatus(status: Task['status']) {
     return this.tasks.filter(t => t.status === status);
   }
@@ -57,15 +71,14 @@ export class KanbanPage {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm' && data) {
-      if (task) {
-        // Editar
+      if (task && task.id) {
+        // Editar: Apenas chame o update. Não precisa recarregar a lista manual.
         this.taskService.update(task.id, data);
       } else {
         // Criar
         this.taskService.add(data);
       }
-
-      this.tasks = this.taskService.getAll();
+     
     }
   }
 
@@ -76,17 +89,19 @@ export class KanbanPage {
 
   // QUANDO SOLTA NA COLUNA
   onDrop(toStatus: Task['status']) {
-    if (!this.draggingTask) return;
+    if (!this.draggingTask || !this.draggingTask.id) return;
 
+    // Apenas avisa o firebase que mudou o status.
+    // Em milissegundos, o Firebase avisa o subscribe, que atualiza a tela.
     this.taskService.update(this.draggingTask.id, { status: toStatus });
-    this.tasks = this.taskService.getAll();
-
+    
     this.draggingTask = null;
   }
 
-  // ------------- 🔥 NOVO MÉTODO: APAGAR TAREFA -------------
+  // APAGAR TAREFA
   onDeleteTask(task: Task) {
-    this.taskService.delete(task.id);       // remove do storage
-    this.tasks = this.taskService.getAll(); // recarrega lista atualizada
+    if(task.id) {
+      this.taskService.delete(task.id);
+    }
   }
 }
