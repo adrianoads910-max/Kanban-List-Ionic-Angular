@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import {
   IonContent, IonHeader, IonTitle, IonToolbar,
   IonButton, IonInput, IonTextarea, ModalController
@@ -17,17 +16,24 @@ import { Task, Subtask } from 'src/app/models/task';
   imports: [
     CommonModule,
     FormsModule,
-    IonContent, IonHeader, IonTitle, IonToolbar,
-    IonButton, IonInput, IonTextarea
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButton,
+    IonInput,
+    IonTextarea
   ],
 })
 export class TaskFormPage {
 
   @Input() task?: Task;
 
-  // Estado inicial da tarefa
-  form: Task = {
-    id: '',
+  /**  
+   * O formulário NÃO deve ter id.
+   * O TaskService.add() gera um id automaticamente.
+   */
+  form: Omit<Task, 'id'> = {
     title: '',
     description: '',
     status: 'aberto',
@@ -44,39 +50,33 @@ export class TaskFormPage {
 
   ngOnInit() {
     if (this.task) {
-      this.form = structuredClone(this.task);
-
-      // Evitar problemas com undefined no input date
-      this.form.dueDate = this.task.dueDate ?? '';
-    } else {
-      // Criação nova — gerar id
-      this.form.id = crypto.randomUUID();
-      this.form.createdAt = new Date();
+      // remove o ID antes de clonar, para evitar conflitos
+      const { id, ...resto } = this.task;
+      this.form = structuredClone(resto);
     }
   }
 
+  // ➕ Adicionar subtarefa
   addSubtask() {
     const label = this.newSubtaskLabel.trim();
     if (!label) return;
 
-    this.form.subtasks.push({
-      label,
-      done: false
-    });
-
+    this.form.subtasks.push({ label, done: false });
     this.newSubtaskLabel = '';
   }
 
+  // ❌ Remover subtarefa
   removeSubtask(sub: Subtask) {
     this.form.subtasks = this.form.subtasks.filter(s => s !== sub);
   }
 
+  // Fechar modal
   dismiss() {
     this.modalCtrl.dismiss(null, 'cancel');
   }
 
+  // Salvar tarefa (criação ou edição)
   saveTask() {
-    this.form.updatedAt = new Date();
     this.modalCtrl.dismiss(this.form, 'confirm');
   }
 }

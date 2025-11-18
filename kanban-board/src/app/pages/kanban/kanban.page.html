@@ -30,6 +30,7 @@
         [status]="col.status"
         [tasks]="getTasksByStatus(col.status)"
         (editTask)="openTaskForm($event)"
+        (deleteTask)="onDeleteTask($event)"
         (dropped)="onDrop($event)"
         (startDrag)="onDragStart($event)"
       >

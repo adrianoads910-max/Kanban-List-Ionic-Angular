@@ -14,6 +14,7 @@ export class TaskCardComponent {
 
   @Input() task!: Task;
 
+  @Output() delete = new EventEmitter<Task>();
   @Output() edit = new EventEmitter<Task>();
   @Output() dragStarted = new EventEmitter<Task>();
 
@@ -25,5 +26,15 @@ export class TaskCardComponent {
 
   toggleSubtask(sub: Subtask) {
     sub.done = !sub.done;
+  }
+
+  onEditClick(event: Event) {
+    event.stopPropagation();
+    this.edit.emit(this.task);
+  }
+
+  onDeleteClick(event: Event) {
+    event.stopPropagation();
+    this.delete.emit(this.task);
   }
 }

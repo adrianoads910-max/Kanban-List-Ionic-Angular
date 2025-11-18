@@ -24,6 +24,8 @@ export class KanbanColumnComponent {
   // 🔧 Evento para editar tarefa
   @Output() editTask = new EventEmitter<Task>();
 
+  @Output() deleteTask = new EventEmitter<Task>();
+
   // 🔥 Envia status da coluna onde caiu o drop
   @Output() dropped = new EventEmitter<Task['status']>();
 

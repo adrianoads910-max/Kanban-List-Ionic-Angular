@@ -4,46 +4,58 @@
   (dragstart)="dragStart(task, $event)"
   (dragend)="dragEnd($event)"
 >
-  <ion-card class="shadow-md rounded-xl border border-gray-300 bg-gray-50">
+  <ion-card class="card-custom relative shadow-md rounded-xl border border-gray-300">
 
-    <ion-card-header class="p-4 flex justify-between items-start">
+    <!-- Botões de ação -->
+    <div class="absolute top-2 right-2 flex gap-2 z-20">
 
-      <div>
-        <ion-card-title class="text-lg font-semibold text-gray-800">
-          {{ task.title }}
-        </ion-card-title>
-
-        <!-- Badge de prioridade -->
-        <span
-          class="inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold"
-          [ngClass]="{
-            'bg-green-100 text-green-700': task.priority === 'baixa',
-            'bg-yellow-100 text-yellow-700': task.priority === 'media',
-            'bg-red-100 text-red-700': task.priority === 'alta'
-          }"
-        >
-          ● {{
-            task.priority === 'baixa'
-              ? 'Baixa'
-              : task.priority === 'media'
-                ? 'Média'
-                : 'Alta'
-          }}
-        </span>
-      </div>
-
-      <!-- Botão editar -->
+      <!-- Editar -->
       <button
-        class="absolute top-2 right-2 text-blue-600 hover:text-blue-800 
-             transition  p-2 rounded-full shadow-sm"
-        (click)="edit.emit(task)"
+        class="text-blue-600 hover:text-blue-800 transition p-2 rounded-full 
+               cursor-pointer pointer-events-auto"
+        (click)="onEditClick($event)"
       >
         <ion-icon name="create-outline"></ion-icon>
       </button>
 
+      <!-- Excluir -->
+      <button
+        class="text-red-600 hover:text-red-800 transition p-2 rounded-full 
+                 cursor-pointer pointer-events-auto"
+        (click)="onDeleteClick($event)"
+      >
+        <ion-icon name="trash-outline"></ion-icon>
+      </button>
+
+    </div>
+
+    <ion-card-header class="p-4">
+
+      <ion-card-title class="text-lg font-semibold text-gray-800 pr-16">
+        {{ task.title }}
+      </ion-card-title>
+
+      <span
+        class="inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold"
+        [ngClass]="{
+          'bg-green-100 text-green-700': task.priority === 'baixa',
+          'bg-yellow-100 text-yellow-700': task.priority === 'media',
+          'bg-red-100 text-red-700': task.priority === 'alta'
+        }"
+      >
+        ● {{
+          task.priority === 'baixa'
+            ? 'Baixa'
+            : task.priority === 'media'
+              ? 'Média'
+              : 'Alta'
+        }}
+      </span>
+
     </ion-card-header>
 
     <ion-card-content class="px-4 pb-4 text-gray-700">
+
       <p>{{ task.description }}</p>
 
       @if (task.dueDate) {
@@ -52,7 +64,6 @@
         </p>
       }
 
-      <!-- SUBTAREFAS -->
       @if (task.subtasks.length > 0) {
         <div class="mt-3 border-t pt-3">
           <p class="text-sm font-semibold text-gray-600 mb-2">
@@ -61,8 +72,8 @@
 
           <ul class="space-y-2">
             @for (sub of task.subtasks; track sub.label) {
-              <li class="flex items-center gap-2">
 
+              <li class="flex items-center gap-2">
                 <input
                   type="checkbox"
                   class="w-4 h-4"
@@ -76,12 +87,14 @@
                 >
                   {{ sub.label }}
                 </span>
-
               </li>
+
             }
           </ul>
+
         </div>
       }
+
     </ion-card-content>
 
   </ion-card>
