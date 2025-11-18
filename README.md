@@ -1,171 +1,116 @@
 
+-----
+
+# 📋 Kanban List – Ionic + Angular + Firebase
+
+Um **Kanban Board moderno, responsivo e em tempo real**, desenvolvido como desafio técnico para a vaga de estágio (Frontend) da Cyrrus Next Systems.
+
+O projeto utiliza a stack moderna **Ionic 7 + Angular 17 (Standalone)** e destaca-se pela integração completa com **Firebase Firestore** para persistência de dados na nuvem.
+
 
 ---
 
-# 📋 Kanban List – Ionic + Angular
+## 🚀 Tecnologias Utilizadas
 
-Um **Kanban Board moderno e responsivo**, desenvolvido com **Ionic + Angular + TailwindCSS**, oferecendo uma experiência fluida em dispositivos **mobile** e **desktop**.
+  * **Framework:** Ionic 7 (Standalone Components) + Angular 17 
+  * **Estilização:** TailwindCSS (Design System customizável)
+  * **Backend / Banco de Dados:** Firebase Firestore (NoSQL em tempo real) 
+  * **Linguagem:** TypeScript
+  * **Deploy:** GitHub Pages
 
-Este projeto inclui:
-
-✔ Criação, edição e exclusão de tarefas
-✔ Colunas configuráveis
-✔ Drag & Drop entre colunas
-✔ Subtarefas com checkbox
-✔ Modal estilizado para adicionar/editar tarefas
-✔ Filtros por título e prioridade
-✔ Armazenamento local (localStorage)
-✔ Interface limpa e moderna
-
----
-
-## 🚀 Tecnologias
-
-* **Ionic 7 (Standalone Components)**
-* **Angular 17**
-* **TailwindCSS**
-* **TypeScript**
-* **LocalStorage**
-
----
+-----
 
 ## 📦 Funcionalidades
 
-### 📝 Gestão de Tarefas
+### 📝 Gestão de Tarefas Avançada
 
-* Criar tarefas com:
+  * **CRUD Completo:** Criar, Ler, Atualizar e Deletar tarefas.
+  * **Campos detalhados:** Título, Descrição, Status, Prioridade (Baixa, Média, Alta), Data de Entrega e Subtarefas (Checklist).
 
-  * Título
-  * Descrição
-  * Status
-  * Prioridade
-  * Data
-  * Subtarefas
-* Editar tarefas
-* Deletar tarefas
+### 🎯 Workflow Kanban 
 
-### 🪄 Interface Visual
+  * **4 Colunas Fixas:** Aberto, Em Andamento, Concluído, Done Done.
+  * **Cores Semânticas:** Identificação visual rápida para cada estado e prioridade.
+  * **Contadores:** Visualização do total de tarefas por coluna.
 
-* Layout em colunas estilo Kanban
-* Cores diferenciadas por coluna
-* Ícone de edição no card
-* Subtarefas com marcação visual
-* Cards arrastáveis (drag & drop)
+### ✨ Interatividade e UX
 
-### 🎯 Drag & Drop
+  * **Drag & Drop:** Arraste e solte tarefas entre colunas para atualizar o status automaticamente.
+  * **Filtros Dinâmicos:** Filtragem em tempo real por Título e Prioridade dentro de cada colun.
+  * **Persistência Offline:** Suporte a funcionamento offline (cache do Firestore).
 
-Arraste tarefas entre colunas:
+-----
 
-* Aberto
-* Em andamento
-* Concluído
-* Done Done
+## ⚙️ Como rodar o projeto localmente 
 
-O status é atualizado automaticamente no serviço.
+### 1️⃣ Pré-requisitos
 
-### 🔎 Filtros Inteligentes
+Certifique-se de ter o **Node.js** e o **Ionic CLI** instalados.
 
-Cada coluna possui filtros:
+### 2️⃣ Instalação
 
-* Filtrar por título
-* Filtrar por prioridade
+Clone o repositório e instale as dependências:
 
----
-
-## 🧩 Estrutura do Projeto
-
-```
-src/
- ├── app/
- │   ├── components/
- │   │   ├── kanban-column/
- │   │   ├── task-card/
- │   ├── models/
- │   │   └── task.ts
- │   ├── pages/
- │   │   ├── kanban/
- │   │   ├── task-form/
- │   ├── services/
- │   │   └── task.service.ts
- │   └── app.routes.ts
- ├── main.ts
- └── index.html
-```
-
----
-
-## ⚙️ Como rodar o projeto
-
-### 1️⃣ Instale as dependências
-
-```sh
+```bash
+git clone https://github.com/adrianoads910-max/Kanban-List-Ionic-Angular.git
+cd Kanban-List-Ionic-Angular
 npm install
 ```
 
-### 2️⃣ Execute o projeto
+### 3️⃣ Execução
 
-```sh
+Inicie o servidor de desenvolvimento:
+
+```bash
 ionic serve
 ```
 
-### 3️⃣ Acesse no navegador
+O projeto abrirá automaticamente em `http://localhost:8100`.
 
-[http://localhost:8100](http://localhost:8100)
+-----
 
----
+## 🧠 Decisões de Projeto (Q\&A Obrigatório)
 
-## 📱 Preview (Screenshots)
+]Conforme solicitado no desafio técnico, abaixo estão as respostas sobre o desenvolvimento.
 
-*(Adicione prints depois no GitHub)*
+### 1. Qual foi sua lógica para estruturar o projeto? [
 
----
+Optei pela arquitetura moderna de **Standalone Components** do Angular 17 para reduzir a complexidade e tornar a aplicação mais leve.
+A estrutura foi dividida em:
 
-## 🗄 Armazenamento
+  * **Pages:** A `KanbanPage` atua como o orquestrador inteligente, conectando-se ao serviço de dados.
+  * **Components:** Componentes "burros" (dumb components) como `KanbanColumn` e `TaskCard` apenas recebem dados (`@Input`) e emitem eventos (`@Output`), garantindo reutilização e facilidade de teste.
+  * **Services:** O `TaskService` centraliza toda a lógica de negócios e comunicação com o Firebase, utilizando `Observables` para garantir que a interface seja reativa e atualizada em tempo real.
 
-As tarefas são salvas no:
+### 2. Que parte você achou mais difícil ou travou? 
 
-```
-localStorage → "tasks"
-```
+O maior desafio foi a configuração do **deploy em produção** combinando Ionic, TailwindCSS e GitHub Pages.
+Houve um problema específico onde o mecanismo de "Purge" do Tailwind removia as classes CSS dinâmicas das colunas (cores de fundo) no build final. Foi necessário configurar o `safelist` no `tailwind.config.js` e ajustar as variáveis de ambiente (`environment.prod.ts`) para garantir que o Firebase e os estilos carregassem corretamente fora do `localhost`.
 
-Nada é perdido ao atualizar a página.
+### 3. O que faria diferente se tivesse mais tempo? 
 
----
+  * **Testes Unitários:** Implementaria testes com Jasmine/Karma para garantir a estabilidade do `TaskService` e dos componentes visuais.
+  * **Drag & Drop Mobile:** Melhoraria a experiência de toque (touch) no mobile usando a biblioteca `Angular CDK DragDrop` com configurações específicas para evitar conflito com o scroll da tela.
+  * **Autenticação:** Implementaria o Firebase Auth para que cada usuário tivesse seu próprio quadro privado.
 
-## 🤝 Contribuindo
+### 4. O que faria diferente se fosse para um cliente real? 
 
-Contribuições são bem-vindas!
+  * **Segurança:** Configuraria as *Security Rules* do Firestore para permitir leitura/escrita apenas para usuários autenticados, protegendo o banco de dados.
+  * **Feedback de Erro:** Implementaria um interceptador HTTP global e serviços de Toast/Alert para avisar o usuário amigavelmente caso a conexão caísse ou ocorresse um erro no servidor.
+  * **Acessibilidade (a11y):** Focaria mais em atributos ARIA e navegação por teclado para garantir que o Kanban fosse utilizável por leitores de tela.
 
-1. Faça um **fork**
-2. Crie uma branch:
+### 5\. Você usou alguma ferramenta ou IA para ajudar? Como? 
 
-   ```sh
-   git checkout -b minha-feature
-   ```
-3. Faça o commit:
+Sim, utilizei IA (Gemini) como um "Pair Programmer".
+A IA foi fundamental para:
 
-   ```sh
-   git commit -m "Minha nova feature"
-   ```
-4. Envie a branch:
+1.  Acelerar a configuração inicial do Firebase (v9 modular).
+2.  Refatorar o código para o padrão Standalone do Angular, garantindo as melhores práticas atuais.
+    A lógica de negócios e a estruturação dos componentes foram guiadas pelos requisitos do desafio, usando a IA para otimizar a sintaxe e resolver bugs específicos de configuração.
 
-   ```sh
-   git push origin minha-feature
-   ```
-5. Abra um **Pull Request**
-
----
-
-## 📜 Licença
-
-Este projeto está sob a licença **MIT**.
-
----
+-----
 
 ## 👨‍💻 Autor
 
 **Adriano ADS**
 🔗 GitHub: [https://github.com/adrianoads910-max](https://github.com/adrianoads910-max)
-
----
-
