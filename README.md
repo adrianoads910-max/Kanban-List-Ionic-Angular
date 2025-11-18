@@ -69,6 +69,19 @@ O projeto abrirá automaticamente em `http://localhost:8100`.
 
 -----
 
+## 📱 Preview (Screenshots)
+
+### 🎥 Funcionamento (Demo)
+![Demo do App](./kanban-board/src/assets/teste.gif)
+
+---
+
+### 📸 Capturas de Tela
+
+| Kanban Board (Frontend) | Integração Firebase (Backend) |
+| :---: | :---: |
+| ![Kanban](./kanban-board/src/assets/kanban.png) | ![Firebase](./kanban-board/src/assets/firebase.png) |
+
 ## 🧠 Decisões de Projeto (Q\&A Obrigatório)
 
 ]Conforme solicitado no desafio técnico, abaixo estão as respostas sobre o desenvolvimento.
