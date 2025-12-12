@@ -1,8 +1,11 @@
 const fs = require('fs');
+const path = require('path');
 
-// Garanta que o caminho aqui está certo (src/environments/...)
+// Caminho do diretório e do arquivo
+const dirPath = './src/environments';
 const targetPath = './src/environments/environment.prod.ts';
 
+// Conteúdo do arquivo
 const envConfigFile = `
 export const environment = {
   production: true,
@@ -18,7 +21,18 @@ export const environment = {
 };
 `;
 
+// 1. Cria a pasta se ela não existir (O segredo está aqui!)
+if (!fs.existsSync(dirPath)){
+    fs.mkdirSync(dirPath, { recursive: true });
+    console.log(`Diretório ${dirPath} criado!`);
+}
+
+// 2. Cria o arquivo
 fs.writeFile(targetPath, envConfigFile, function (err) {
-  if (err) { console.log(err); }
-  else { console.log(`Arquivo environment.prod.ts gerado com sucesso!`); }
+  if (err) {
+    console.log('Erro ao criar arquivo:', err);
+    throw err;
+  } else {
+    console.log(`Arquivo ${targetPath} gerado com sucesso!`);
+  }
 });
