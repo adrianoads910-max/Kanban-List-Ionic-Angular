@@ -1,11 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
-// Caminho do diretório e do arquivo
+// Caminho do diretório
 const dirPath = './src/environments';
-const targetPath = './src/environments/environment.prod.ts';
 
-// Conteúdo do arquivo
+// Caminhos dos arquivos (Vamos criar os dois!)
+const prodPath = './src/environments/environment.prod.ts';
+const devPath = './src/environments/environment.ts';
+
+// Conteúdo do arquivo (usaremos o mesmo para ambos no build da Vercel)
 const envConfigFile = `
 export const environment = {
   production: true,
@@ -21,18 +24,20 @@ export const environment = {
 };
 `;
 
-// 1. Cria a pasta se ela não existir (O segredo está aqui!)
+// 1. Cria a pasta se não existir
 if (!fs.existsSync(dirPath)){
     fs.mkdirSync(dirPath, { recursive: true });
     console.log(`Diretório ${dirPath} criado!`);
 }
 
-// 2. Cria o arquivo
-fs.writeFile(targetPath, envConfigFile, function (err) {
-  if (err) {
-    console.log('Erro ao criar arquivo:', err);
-    throw err;
-  } else {
-    console.log(`Arquivo ${targetPath} gerado com sucesso!`);
-  }
+// 2. Cria o arquivo de PRODUÇÃO
+fs.writeFile(prodPath, envConfigFile, function (err) {
+  if (err) { console.log(err); } 
+  else { console.log(`Arquivo ${prodPath} gerado com sucesso!`); }
+});
+
+// 3. Cria o arquivo de DESENVOLVIMENTO (Cópia para enganar o Angular)
+fs.writeFile(devPath, envConfigFile, function (err) {
+  if (err) { console.log(err); } 
+  else { console.log(`Arquivo ${devPath} gerado com sucesso!`); }
 });
