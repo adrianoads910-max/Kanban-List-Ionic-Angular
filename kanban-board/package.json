@@ -3,15 +3,17 @@
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
+  "private": true,
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "electron": "ionic build && electron electron/main.js",
+    "electron:build": "ionic build && electron-builder"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^20.0.0",
     "@angular/common": "^20.0.0",
@@ -45,11 +47,14 @@
     "@angular/compiler-cli": "^20.0.0",
     "@angular/language-service": "^20.0.0",
     "@capacitor/cli": "7.4.4",
+    "@electron/remote": "^2.1.3",
     "@ionic/angular-toolkit": "^12.0.0",
     "@types/jasmine": "~5.1.0",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "autoprefixer": "^10.4.22",
+    "electron": "^33.4.11",
+    "electron-builder": "^24.9.0",
     "eslint": "^9.16.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.2.1",
@@ -64,6 +69,12 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.13",
     "typescript": "~5.9.0"
+  },
+  "build": {
+    "appId": "com.kanban.board",
+    "directories": {
+      "output": "dist-electron"
+    }
   },
   "description": "An Ionic project"
 }
