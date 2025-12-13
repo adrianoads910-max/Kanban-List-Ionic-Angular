@@ -1,10 +1,9 @@
 import { Routes } from '@angular/router';
-import { KanbanPage } from './pages/kanban/kanban.page';
-
 
 export const routes: Routes = [
   {
     path: '',
-    component: KanbanPage
-  }
+    loadComponent: () =>
+      import('./pages/kanban/kanban.page').then(m => m.KanbanPage),
+  },
 ];

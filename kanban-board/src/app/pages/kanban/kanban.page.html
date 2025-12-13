@@ -1,6 +1,5 @@
 <ion-header>
   <ion-toolbar class="navbar-custom shadow flex justify-between items-center">
-
     <ion-title class="text-xl font-bold text-gray-50">
       Kanban Board
     </ion-title>
@@ -14,30 +13,23 @@
         Nova Tarefa
       </ion-button>
     </ion-buttons>
-
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content class="body-custom bg-gray-200">
-
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 p-4">
 
-    @for (col of columns; track col.status) {
-
-      <app-kanban-column
-        [title]="col.title"
-        [status]="col.status"
-        [tasks]="getTasksByStatus(col.status)"
-        (editTask)="openTaskForm($event)"
-        (deleteTask)="onDeleteTask($event)"
-        (dropped)="onDrop($event)"
-        (startDrag)="onDragStart($event)"
-      >
-      </app-kanban-column>
-
-    }
+    <app-kanban-column
+      *ngFor="let col of columns; trackBy: trackByStatus"
+      [title]="col.title"
+      [status]="col.status"
+      [tasks]="getTasksByStatus(col.status)"
+      (editTask)="openTaskForm($event)"
+      (deleteTask)="onDeleteTask($event)"
+      (dropped)="onDrop($event)"
+      (startDrag)="onDragStart($event)"
+    >
+    </app-kanban-column>
 
   </div>
-
 </ion-content>
